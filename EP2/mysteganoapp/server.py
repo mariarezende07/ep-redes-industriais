@@ -2,26 +2,28 @@ from stegano import lsb
 import os
 import matplotlib.pyplot as plt
 import socket
+import io
 
+dirname = os.path.dirname(__file__)
+
+IN_IMG = os.path.join(dirname, 'img.png')
+OUT_IMG = os.path.join(dirname, 'img_secret.png')
+msg = 'Hello World'
 
 # 1.1
-def steganogram_in_image():
-    dirname = os.path.dirname(__file__)
+def steganogram_in_image(IN_IMG, OUT_IMG, msg, plot):
 
-    IN_IMG = os.path.join(dirname, 'img.png')
-    OUT_IMG = os.path.join(dirname, 'img_secret.png')
-    msg = 'Hello World'
+    secret = lsb.hide(IN_IMG, msg)
+    secret.save(OUT_IMG)
+    if plot:
+        image = plt.imread(OUT_IMG)
+        plt.imshow(image) 
+        plt.show()
 
-    secret = lsb.hide(IN_IMG, msg).save(OUT_IMG)
+        clear_message = lsb.reveal(OUT_IMG)
+        print(clear_message)
+    return secret
 
-    image = plt.imread(OUT_IMG)
-    plt.imshow(image) 
-    plt.show()
-
-    clear_message = lsb.reveal(OUT_IMG)
-    print(clear_message)
-
-steganogram_in_image()
 
 
 def convert_to_byte_arr(image, format):
@@ -30,14 +32,19 @@ def convert_to_byte_arr(image, format):
     return img_byte_arr.getvalue()
 
 
-HOST = '' # Symbolic name meaning all available interfaces
-PORT = 50007 # Arbitrary non-privileged port
+HOST = '' 
+PORT = 50007
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.bind((HOST, PORT))
     s.listen(1)
     conn, addr = s.accept()
-    with conn:
+    with conn: 
         print('Connected by', addr)
+        img_steg = steganogram_in_image(IN_IMG, OUT_IMG, msg, False)
+        img = convert_to_byte_arr(img_steg, 'PNG')
+    
+        conn.sendall(img)
+        
         while True:
             data = conn.recv(1024)
             if not data: break
