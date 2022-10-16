@@ -15,8 +15,11 @@ HOST = 'localhost'
 PORT = 50007
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.connect((HOST, PORT))
-    
-    s.sendall(b"Received")
+    image_path = input("Stegano: ")
+    s.sendall(bytes(image_path,"UTF-8"))
+
+    msg = input("Secret: ")
+    s.sendall(bytes(msg,"UTF-8"))
     
     data = s.recv(694773)
     
