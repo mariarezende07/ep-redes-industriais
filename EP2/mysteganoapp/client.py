@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
 import socket
-
+from PIL import Image, ImageFile
+import io
 import socket
+
 HOST = 'localhost'
 PORT = 50007
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -9,8 +11,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     
     s.sendall(b"Received")
     
-    data = s.recv(1024)
+    data = s.recv(694773)
     
     s.close()
 
-print(data)
+img = Image.open(io.BytesIO(data))
+img.show()
+
+
+
+
+

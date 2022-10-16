@@ -16,16 +16,20 @@ s.bind((HOST, PORT))
 s.listen(1)
 while True:
     print("Now listening...\n")
+    image = steganogram_image(IN_IMG, OUT_IMG, msg, False)
+    bit_img = convert_to_byte_arr(image, 'PNG')
+
+    socket_size = len(bit_img)
+    print(socket_size)
     conn, addr = s.accept()
     print('Connected by', addr)
     while True:
-        data = conn.recv(1024)
+        
+        data = conn.recv(socket_size)
         if not data: 
             break
         
-        image = steganogram_image(IN_IMG, OUT_IMG, msg, False)
-        bit_img = convert_to_byte_arr(image, 'PNG')
-
+        
         conn.sendall(bit_img)
         print(data)
         break

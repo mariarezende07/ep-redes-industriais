@@ -35,6 +35,6 @@ def steganogram_image(IN_IMG: str, OUT_IMG: str, msg: str, plot: bool) -> Image:
 
 
 def convert_to_byte_arr(image, format):
-    img_byte_arr = io.BytesIO()
-    image.save(img_byte_arr, format=format)
-    return img_byte_arr.getvalue()
+    b = io.BytesIO()
+    image.save(b, format=format)
+    return b.getvalue()
