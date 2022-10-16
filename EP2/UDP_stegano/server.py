@@ -1,5 +1,5 @@
 import socket
-from utils import steganogram_image, convert_to_byte_arr,receive_byte_array, send_byte_array_img
+from utils import steganogram_image, convert_to_byte_arr,receive_byte_array, send_byte_array_img, send_byte_array
 import os
 
 dirname = os.path.dirname(__file__)
@@ -27,6 +27,9 @@ while True:
         IN_IMG = os.path.join(dirname, img_path)
         image = steganogram_image(IN_IMG, msg)
         bit_img = convert_to_byte_arr(image, 'PNG')
+        img_size = str(len(bit_img))
+        s.sendto(bytes(img_size,"UTF-8"), addr)
+
         send_byte_array_img(bit_img, s, SEG_SIZE, addr[0], addr[1])
             
         print("All sended")

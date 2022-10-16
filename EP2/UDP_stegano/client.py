@@ -14,7 +14,6 @@ HOST = '127.0.0.1'
 PORT = 50007
 
 SEG_SIZE = 1022
-TOTAL_SIZE = 694960
 
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
 
@@ -23,6 +22,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
 
     msg = input("Secret: ")
     send_byte_array(msg, s, SEG_SIZE, HOST, PORT)
+
+    TOTAL_SIZE = int(s.recvfrom(SEG_SIZE)[0].decode())
+    SEG_SIZE = round(TOTAL_SIZE/10)
     
     data = receive_byte_array_img(s, TOTAL_SIZE, SEG_SIZE)[0]
     data = b"".join(data)
