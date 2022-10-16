@@ -50,19 +50,19 @@ def send_byte_array(msg, s, SEG_SIZE, HOST, PORT):
     byte_arr = [byte_arr[i:i + SEG_SIZE] for i in range(0, len(byte_arr), SEG_SIZE)]
     for i in range(len(byte_arr)):
         s.sendto(byte_arr[i], (HOST,PORT))
-        print("Segment sended", i)
+        print(f"Segment {i} sended")
 
 def send_byte_array_img(img, s, SEG_SIZE, HOST, PORT):
     img =  [img[i:i + SEG_SIZE] for i in range(0, len(img), SEG_SIZE)]
     for i in range(len(img)):
         s.sendto(bytes(img[i]), (HOST,PORT))
-        print(len(img))
+        print(f"Segment {i} sended")
 
 def receive_byte_array(s, TOTAL_SIZE, SEG_SIZE):
     byte_arr = []
     data, addr = s.recvfrom(SEG_SIZE)
     byte_arr.append(data)
-    print("Segment received from", addr, data)
+    print(f"Segment received from {addr}")
     return byte_arr, addr
 
 def receive_byte_array_img(s, TOTAL_SIZE, SEG_SIZE):
@@ -70,5 +70,5 @@ def receive_byte_array_img(s, TOTAL_SIZE, SEG_SIZE):
     for i in range(680):
         data, addr = s.recvfrom(SEG_SIZE)
         byte_arr.append(data)
-        print("Segment received from", addr)
+        print(f"Segment {i} received from {addr}")
     return byte_arr, addr
