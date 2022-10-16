@@ -1,9 +1,7 @@
 from stegano import lsb
 import io
-import matplotlib.pyplot as plt
 from PIL import Image
 
-# 1.1
 def steganogram_image(IN_IMG: str, msg: str) -> Image:
     """
     Puts a stegnogram in an image
@@ -29,11 +27,20 @@ def reveal_stagnogram(secret_image:Image) -> str:
     Returns:
         str: Secret revealed
     """
-    # Hides the secret with stegano lib
+    # Reveals the secret with stegano lib
     secret = lsb.reveal(secret_image)    
     return secret
 
-def convert_to_byte_arr(image, format):
+def convert_to_byte_arr(image: Image, format: str) -> bytes:
+    """Convert image to byte arrat
+
+    Args:
+        image (Image): Image to be transformed
+        format (str): Image format
+
+    Returns:
+        bytes: Bytes array of image
+    """
     b = io.BytesIO()
     image.save(b, format=format)
     return b.getvalue()
